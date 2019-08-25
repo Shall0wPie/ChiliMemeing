@@ -75,9 +75,9 @@ bool Game::CheckBorderCollision(GameObject *obj)
 		obj->x = 0;
 		isColliding = true;
 	}
-	else if (obj->x > gfx.ScreenWidth - obj->tileXSize - 1)
+	else if (obj->x > float(gfx.ScreenWidth - obj->tileXSize - 1))
 	{
-		obj->x = (float)gfx.ScreenWidth - obj->tileXSize - 1;
+		obj->x = float(gfx.ScreenWidth - obj->tileXSize - 1);
 		isColliding = true;
 	}
 
@@ -86,9 +86,9 @@ bool Game::CheckBorderCollision(GameObject *obj)
 		obj->y = 0;
 		isColliding = true;
 	}
-	else if (obj->y > gfx.ScreenHeight - obj->tileYSize - 1)
+	else if (obj->y > float(gfx.ScreenHeight - obj->tileYSize - 1))
 	{
-		obj->y = (float)gfx.ScreenHeight - obj->tileYSize - 1;
+		obj->y = float(gfx.ScreenHeight - obj->tileYSize - 1);
 		isColliding = true;
 	}
 	return isColliding;

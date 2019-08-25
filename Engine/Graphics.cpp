@@ -334,7 +334,7 @@ void Graphics::MakeLine(int x0, int y0 , int x1, int y1)
 
 	for (int i = x0; i <= x1; i++)
 	{
-		Y = ((float)(i - x0) / ((x1 - x0) ? (x1 - x0) : 1))*(y1 - y0) + y0;
+		Y = int((float(i - x0) / ((x1 - x0) ? (x1 - x0) : 1))*(y1 - y0) + y0);
 		PutPixel(i ,Y, 255, 0, 0);
 	}
 
@@ -351,7 +351,7 @@ void Graphics::MakeLine(int x0, int y0 , int x1, int y1)
 
 	for (int i = y0; i <= y1; i++)
 	{
-		X = ((float)(i - y0) / ((y1 - y0) ? (y1 - y0) : 1))*(x1 - x0) + x0;
+		X = int((float(i - y0) / ((y1 - y0) ? (y1 - y0) : 1))*(x1 - x0) + x0);
 		PutPixel(X, i, 255, 0, 0);
 	}
 }

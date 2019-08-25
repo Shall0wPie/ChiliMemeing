@@ -31,7 +31,7 @@ public:
 	void Draw(Graphics &gfx) const;
 };
 
-class Unit : public GameObject
+class Player : public GameObject
 {
 private:
 	static constexpr float friction = 0.1f;
@@ -39,7 +39,7 @@ private:
 public:
 	std::vector<Projectile> bullets;
 
-	Unit(int _x, int _y);
+	Player(int _x, int _y);
 	void Control(const Keyboard &kbd, const Mouse &mouse);
 	void Draw(Graphics &gfx) const;
 };

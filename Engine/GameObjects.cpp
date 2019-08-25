@@ -27,10 +27,10 @@ Projectile::Projectile()
 
 void Projectile::Launch(int x0, int y0, int x1, int y1)
 {
-	x = x0;
-	y = y0;
-	float delX = x1 - x0;
-	float delY = y1 - y0;
+	x = float(x0);
+	y = float(y0);
+	float delX = float(x1 - x0);
+	float delY = float(y1 - y0);
 	float c = sqrt(delX * delX + delY * delY);
 
 	dx = delX/c * speed;
@@ -45,18 +45,18 @@ void Projectile::Move()
 
 void Projectile::Draw(Graphics &gfx) const
 {
-	gfx.MakeRect(x, y, tileXSize, tileYSize, Colors::Green);
+	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, Colors::Green);
 }
 
-Unit::Unit(int _x, int _y)
+Player::Player(int _x, int _y)
 {
-	x = _x;
-	y = _y;
+	x = float(_x);
+	y = float(_y);
 	tileXSize = 10;
 	tileYSize = 10;
 }
 
-void Unit::Control(const Keyboard &kbd, const Mouse &mouse)
+void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 {
 	bool adIsPresed = false;
 	bool wsIsPresed = false;
@@ -92,7 +92,7 @@ void Unit::Control(const Keyboard &kbd, const Mouse &mouse)
 	if (mouse.LeftIsPressed())
 	{
 		bullets.emplace_back(Projectile());
-		bullets.back().Launch(x, y, mouse.GetPosX(), mouse.GetPosY());
+		bullets.back().Launch(int(x), int(y), mouse.GetPosX(), mouse.GetPosY());
 		bullets.back().x = x;
 		bullets.back().y = y;
 	}
@@ -121,34 +121,37 @@ void Unit::Control(const Keyboard &kbd, const Mouse &mouse)
 }
 
 
-void Unit::Draw(Graphics &gfx) const
+void Player::Draw(Graphics &gfx) const
 {
-	gfx.PutPixel(x + 5, y,      color);
-	gfx.PutPixel(x + 5, y + 1,  color);
-	gfx.PutPixel(x + 5, y + 2,  color);
-	gfx.PutPixel(x + 5, y + 8,  color);
-	gfx.PutPixel(x + 5, y + 9,  color);
-	gfx.PutPixel(x + 5, y + 10, color);
+	const int x_int = int(x);
+	const int y_int = int(y);
+
+	gfx.PutPixel(x_int + 5, y_int,      color);
+	gfx.PutPixel(x_int + 5, y_int + 1,  color);
+	gfx.PutPixel(x_int + 5, y_int + 2,  color);
+	gfx.PutPixel(x_int + 5, y_int + 8,  color);
+	gfx.PutPixel(x_int + 5, y_int + 9,  color);
+	gfx.PutPixel(x_int + 5, y_int + 10, color);
 		
-	gfx.PutPixel(x, y + 5,      color);
-	gfx.PutPixel(x + 1, y + 5,  color);
-	gfx.PutPixel(x + 2, y + 5,  color);
-	gfx.PutPixel(x + 8, y + 5,  color);
-	gfx.PutPixel(x + 9, y + 5,  color);
-	gfx.PutPixel(x + 10, y + 5, color);
+	gfx.PutPixel(x_int	  , y_int + 5,  color);
+	gfx.PutPixel(x_int + 1 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 2 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 8 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 9 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 10, y_int + 5,  color);
 }
 
 SizeableRectangle::SizeableRectangle(int _x, int _y)
 {
-	x = _x;
-	y = _y;
+	x = float(_x);
+	y = float(_y);
 	tileXSize = 50;
 	tileYSize = 50;
 }
 
 void SizeableRectangle::Draw(Graphics &gfx) const
 {
-	gfx.MakeRect(x, y, tileXSize, tileYSize, color);
+	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, color);
 }
 
 void SizeableRectangle::ControlSizes(const Keyboard &kbd)

@@ -55,6 +55,6 @@ private:
 	std::uniform_int_distribution<int> xRng;
 	std::uniform_int_distribution<int> yRng;
 
-	Unit crossHair = { 400, 300 };
+	Player crossHair = { 400, 300 };
 	//SizeableRectangle sizeableRect = { 500, 300 };
 };
