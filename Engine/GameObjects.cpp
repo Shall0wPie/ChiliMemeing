@@ -25,12 +25,12 @@ Projectile::Projectile()
 	tileYSize = 10;
 }
 
-void Projectile::Launch(int x0, int y0, int x1, int y1)
+void Projectile::Launch(float x0, float y0, float x1, float y1)
 {
-	x = float(x0);
-	y = float(y0);
-	float delX = float(x1 - x0);
-	float delY = float(y1 - y0);
+	x = x0;
+	y = y0;
+	float delX = x1 - x0;
+	float delY = y1 - y0;
 	float c = sqrt(delX * delX + delY * delY);
 
 	dx = delX/c * speed;
@@ -48,10 +48,10 @@ void Projectile::Draw(Graphics &gfx) const
 	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, Colors::Green);
 }
 
-Player::Player(int _x, int _y)
+Player::Player(float _x, float _y)
 {
-	x = float(_x);
-	y = float(_y);
+	x = _x;
+	y = _y;
 	tileXSize = 10;
 	tileYSize = 10;
 }
@@ -92,7 +92,7 @@ void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 	if (mouse.LeftIsPressed())
 	{
 		bullets.emplace_back(Projectile());
-		bullets.back().Launch(int(x), int(y), mouse.GetPosX(), mouse.GetPosY());
+		bullets.back().Launch(x, y, mouse.GetPosX(), mouse.GetPosY());
 		bullets.back().x = x;
 		bullets.back().y = y;
 	}
@@ -141,10 +141,10 @@ void Player::Draw(Graphics &gfx) const
 	gfx.PutPixel(x_int + 10, y_int + 5,  color);
 }
 
-SizeableRectangle::SizeableRectangle(int _x, int _y)
+SizeableRectangle::SizeableRectangle(float _x, float _y)
 {
-	x = float(_x);
-	y = float(_y);
+	x = _x;
+	y = _y;
 	tileXSize = 50;
 	tileYSize = 50;
 }
@@ -172,4 +172,62 @@ void SizeableRectangle::ControlSizes(const Keyboard &kbd)
 		tileYSize = 0;
 }
 
+StupidMob::StupidMob(float _x, float _y) : isAlive(true)
+{
+	x = _x;
+	y = _y;
+	tileXSize = 20;
+	tileYSize = 20;
+	color = Colors::Red;
+}
 
+void StupidMob::MoveTowards(GameObject & target)
+{
+	float delX = target.x - x;
+	float delY = target.y - y;
+	float c = sqrt(delX*delX + delY* delY);
+
+	dx = (delX / c) * speed;
+	dy = (delY / c) * speed;
+
+	x += dx;
+	y += dy;
+}
+
+void StupidMob::Respawn(float _x, float _y, const Graphics &gfx)
+{
+	const int &width = gfx.ScreenWidth - tileXSize;
+	const int &height = gfx.ScreenHeight - tileYSize;
+	static constexpr int spawnSpace = 20;
+	static char ca = 1;
+
+	if (_x > width - tileXSize)
+		_x = width - tileXSize;
+	
+	if (_y > height - tileYSize)
+		_y = height - tileYSize;
+
+	if ((_x > spawnSpace && _x < width - spawnSpace) && (_y > spawnSpace && _y < height - spawnSpace))
+	{
+		if (ca++ % 2)
+		{
+			x = _x;
+			y = _y < height / 2 ? float(int(_y) % spawnSpace) : float(int(_y) % spawnSpace + height - spawnSpace);
+		}
+		else
+		{
+			x = _x < width / 2 ? float(int(_x) % spawnSpace) : float(int(_x) % spawnSpace + width - spawnSpace);
+			y = _y;
+		}
+	}
+	else
+	{
+		x = _x;
+		y = _y;
+	}
+}
+
+void StupidMob::Draw(Graphics & gfx) const
+{
+	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, color);
+}

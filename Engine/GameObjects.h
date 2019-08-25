@@ -26,7 +26,7 @@ private:
 	static constexpr float speed = 5;
 public:
 	Projectile();
-	void Launch(int x0, int y0, int x1, int y1);
+	void Launch(float x0, float y0, float x1, float y1);
 	void Move();
 	void Draw(Graphics &gfx) const;
 };
@@ -39,16 +39,27 @@ private:
 public:
 	std::vector<Projectile> bullets;
 
-	Player(int _x, int _y);
+	Player(float _x, float _y);
 	void Control(const Keyboard &kbd, const Mouse &mouse);
 	void Draw(Graphics &gfx) const;
 };
 
-
 class SizeableRectangle : public GameObject
 {
 public:
-	SizeableRectangle(int _x, int _y);
+	SizeableRectangle(float _x, float _y);
 	void Draw(Graphics &gfx) const;
 	void ControlSizes(const Keyboard &kbd);
+};
+
+class StupidMob : public GameObject
+{
+private:
+	static constexpr float speed = 1.5f;
+public:
+	bool isAlive;
+	StupidMob(float _x, float _y);
+	void MoveTowards(GameObject &target);
+	void Respawn(float _x, float _y, const Graphics &gfx);
+	void Draw(Graphics &gfx) const;
 };

@@ -41,7 +41,7 @@ private:
 	/********************************/
 	/*  User Functions              */
 	/********************************/
-	bool CheckBorderCollision(GameObject *obj);
+	bool CheckBorderCollision(GameObject &obj);
 
 private:
 	MainWindow& wnd;
@@ -56,5 +56,5 @@ private:
 	std::uniform_int_distribution<int> yRng;
 
 	Player crossHair = { 400, 300 };
-	//SizeableRectangle sizeableRect = { 500, 300 };
+	std::vector<StupidMob> mobs;
 };
