@@ -26,10 +26,18 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	blessRng( rd()),
-	xRng(0 , 749),
-	yRng(0 , 549)
+	xRng(0 , gfx.ScreenWidth - 20),
+	yRng(0 , gfx.ScreenHeight - 20)
 {
 	crossHair.SetColor({ 255, 0, 0});
+
+	int mobsTospawn = 4;
+
+	for (int i = 0; i < mobsTospawn; i++)
+	{
+		mobs.emplace_back(StupidMob(0, 0));
+		mobs[i].Respawn(xRng(blessRng), yRng(blessRng), gfx);
+	}
 }
 
 Game::~Game()
@@ -47,14 +55,32 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	crossHair.Control(wnd.kbd, wnd.mouse);
-	CheckBorderCollision(&crossHair);
-
-	for (int i = 0; i < crossHair.bullets.size(); i++)
+	CheckBorderCollision(crossHair);
+	
+	for (int i = 0; i < mobs.size(); i++)
 	{
-		if (CheckBorderCollision(&crossHair.bullets[i]))
+		mobs[i].MoveTowards(crossHair);
+		CheckBorderCollision(mobs[i]);
+	}
+
+	for (int bulletCounter = 0; bulletCounter < crossHair.bullets.size(); bulletCounter++)
+	{
+		if (CheckBorderCollision(crossHair.bullets[bulletCounter]))
 		{
-			crossHair.bullets.erase(crossHair.bullets.begin() + i);
-			i--;
+			crossHair.bullets.erase(crossHair.bullets.begin() + bulletCounter);
+			bulletCounter--;
+			continue;
+		}
+
+		for (int mobCounter = 0; mobCounter < mobs.size(); mobCounter++)
+		{
+			if (crossHair.bullets[bulletCounter].CheckCollision(mobs[mobCounter]))
+			{
+				mobs[mobCounter].Respawn(xRng(blessRng), yRng(blessRng), gfx);
+				crossHair.bullets.erase(crossHair.bullets.begin() + bulletCounter);
+				bulletCounter--;
+				break;
+			}
 		}
 	}
 }
@@ -62,36 +88,38 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	crossHair.Draw(gfx);
+
+	for (int i = 0; i < mobs.size(); i++)
+		mobs[i].Draw(gfx);
+
 	for (int i = 0; i < crossHair.bullets.size(); i++)
 		crossHair.bullets[i].Draw(gfx);
 }
 
 
-bool Game::CheckBorderCollision(GameObject *obj)
+bool Game::CheckBorderCollision(GameObject &obj)
 {
 	bool isColliding = false;
-	if (obj->x < 0)
+	if (obj.x < 0)
 	{
-		obj->x = 0;
+		obj.x = 0;
 		isColliding = true;
 	}
-	else if (obj->x > gfx.ScreenWidth - obj->tileXSize - 1)
+	else if (obj.x > float(gfx.ScreenWidth - obj.tileXSize - 1))
 	{
-		obj->x = (float)gfx.ScreenWidth - obj->tileXSize - 1;
+		obj.x = float(gfx.ScreenWidth - obj.tileXSize - 1);
 		isColliding = true;
 	}
 
-	if (obj->y < 0)
+	if (obj.y < 0)
 	{
-		obj->y = 0;
+		obj.y = 0;
 		isColliding = true;
 	}
-	else if (obj->y > gfx.ScreenHeight - obj->tileYSize - 1)
+	else if (obj.y > float(gfx.ScreenHeight - obj.tileYSize - 1))
 	{
-		obj->y = (float)gfx.ScreenHeight - obj->tileYSize - 1;
+		obj.y = float(gfx.ScreenHeight - obj.tileYSize - 1);
 		isColliding = true;
 	}
 	return isColliding;
 }
-
-

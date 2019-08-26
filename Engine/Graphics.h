@@ -63,9 +63,10 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 
-	void MakeLine(int x0, int y0, int x1, int y1);
+	void MakeLine(int x0, int y0, int x1, int y1, Color color = Colors::Red);
 	void MakeTriangle(Vertex *vertArr, int size);
 	void MakeRect(int x, int y, int xSize, int ySize, Color color);
+	void MakeCircle(int _x, int _y, int radius, Color color);
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

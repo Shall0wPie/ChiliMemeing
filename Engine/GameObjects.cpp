@@ -1,8 +1,9 @@
 #include "GameObjects.h"
 
-GameObject::GameObject() : x(0), y(0),	dx(0), dy(0),
-													tileXSize(0), tileYSize(0), 
-													color({255, 255, 255})
+GameObject::GameObject() : 
+	x(0), y(0),	dx(0), dy(0),
+	tileXSize(0), tileYSize(0), 
+	color({255, 255, 255})
 {
 }
 
@@ -25,7 +26,7 @@ Projectile::Projectile()
 	tileYSize = 10;
 }
 
-void Projectile::Launch(int x0, int y0, int x1, int y1)
+void Projectile::Launch(float x0, float y0, float x1, float y1)
 {
 	x = x0;
 	y = y0;
@@ -45,10 +46,10 @@ void Projectile::Move()
 
 void Projectile::Draw(Graphics &gfx) const
 {
-	gfx.MakeRect(x, y, tileXSize, tileYSize, Colors::Green);
+	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, Colors::Green);
 }
 
-Unit::Unit(int _x, int _y)
+Player::Player(float _x, float _y)
 {
 	x = _x;
 	y = _y;
@@ -56,8 +57,10 @@ Unit::Unit(int _x, int _y)
 	tileYSize = 10;
 }
 
-void Unit::Control(const Keyboard &kbd, const Mouse &mouse)
+void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 {
+	//////////////////////////////////////////////////////////////
+	// Basic movement controll
 	bool adIsPresed = false;
 	bool wsIsPresed = false;
 	if (kbd.KeyIsPressed('W'))
@@ -81,6 +84,8 @@ void Unit::Control(const Keyboard &kbd, const Mouse &mouse)
 		adIsPresed = true;
 	}
 
+	//////////////////////////////////////////////////////////////
+	// Accseleration
 	if (kbd.KeyIsPressed(VK_SHIFT))
 	{
 		if (adIsPresed)
@@ -89,14 +94,18 @@ void Unit::Control(const Keyboard &kbd, const Mouse &mouse)
 			dy *= 2.0f;
 	}
 
+	//////////////////////////////////////////////////////////////
+	// Shoting projectiles
 	if (mouse.LeftIsPressed())
 	{
 		bullets.emplace_back(Projectile());
-		bullets.back().Launch(x, y, mouse.GetPosX(), mouse.GetPosY());
+		bullets.back().Launch(x, y, float(mouse.GetPosX()), float(mouse.GetPosY()));
 		bullets.back().x = x;
 		bullets.back().y = y;
 	}
 
+	//////////////////////////////////////////////////////////////
+	// Calculating finale dx and dy
 	if (dx > friction)
 		dx -= friction;
 	else if (dx < -friction)
@@ -112,33 +121,39 @@ void Unit::Control(const Keyboard &kbd, const Mouse &mouse)
 	else
 		dy = 0;
 
-
+	//////////////////////////////////////////////////////////////
+	// Adding dx and dy to coords
 	x += dx;
 	y += dy;
 
+	//////////////////////////////////////////////////////////////
+	// Moving bullets
 	for (int i = 0; i < bullets.size(); i++)
 		bullets[i].Move();
 }
 
 
-void Unit::Draw(Graphics &gfx) const
+void Player::Draw(Graphics &gfx) const
 {
-	gfx.PutPixel(x + 5, y,      color);
-	gfx.PutPixel(x + 5, y + 1,  color);
-	gfx.PutPixel(x + 5, y + 2,  color);
-	gfx.PutPixel(x + 5, y + 8,  color);
-	gfx.PutPixel(x + 5, y + 9,  color);
-	gfx.PutPixel(x + 5, y + 10, color);
+	const int x_int = int(x);
+	const int y_int = int(y);
+
+	gfx.PutPixel(x_int + 5, y_int,      color);
+	gfx.PutPixel(x_int + 5, y_int + 1,  color);
+	gfx.PutPixel(x_int + 5, y_int + 2,  color);
+	gfx.PutPixel(x_int + 5, y_int + 8,  color);
+	gfx.PutPixel(x_int + 5, y_int + 9,  color);
+	gfx.PutPixel(x_int + 5, y_int + 10, color);
 		
-	gfx.PutPixel(x, y + 5,      color);
-	gfx.PutPixel(x + 1, y + 5,  color);
-	gfx.PutPixel(x + 2, y + 5,  color);
-	gfx.PutPixel(x + 8, y + 5,  color);
-	gfx.PutPixel(x + 9, y + 5,  color);
-	gfx.PutPixel(x + 10, y + 5, color);
+	gfx.PutPixel(x_int	  , y_int + 5,  color);
+	gfx.PutPixel(x_int + 1 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 2 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 8 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 9 , y_int + 5,  color);
+	gfx.PutPixel(x_int + 10, y_int + 5,  color);
 }
 
-SizeableRectangle::SizeableRectangle(int _x, int _y)
+SizeableRectangle::SizeableRectangle(float _x, float _y)
 {
 	x = _x;
 	y = _y;
@@ -148,7 +163,7 @@ SizeableRectangle::SizeableRectangle(int _x, int _y)
 
 void SizeableRectangle::Draw(Graphics &gfx) const
 {
-	gfx.MakeRect(x, y, tileXSize, tileYSize, color);
+	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, color);
 }
 
 void SizeableRectangle::ControlSizes(const Keyboard &kbd)
@@ -169,4 +184,62 @@ void SizeableRectangle::ControlSizes(const Keyboard &kbd)
 		tileYSize = 0;
 }
 
+StupidMob::StupidMob(float _x, float _y) : isAlive(true)
+{
+	x = _x;
+	y = _y;
+	tileXSize = 20;
+	tileYSize = 20;
+	color = Colors::Red;
+}
 
+void StupidMob::MoveTowards(GameObject & target)
+{
+	float delX = target.x - x;
+	float delY = target.y - y;
+	float c = sqrt(delX*delX + delY*delY);
+
+	dx = (delX / c) * speed;
+	dy = (delY / c) * speed;
+
+	x += dx;
+	y += dy;
+}
+
+void StupidMob::Respawn(float _x, float _y, const Graphics &gfx)
+{
+	const int &width = gfx.ScreenWidth - tileXSize;
+	const int &height = gfx.ScreenHeight - tileYSize;
+	static constexpr int spawnSpace = 20;
+	static char ca = 1;
+
+	if (_x > width - tileXSize)
+		_x = float(width)- tileXSize;
+	
+	if (_y > height - tileYSize)
+		_y = float(height) - tileYSize;
+
+	if ((_x > spawnSpace && _x < width - spawnSpace) && (_y > spawnSpace && _y < height - spawnSpace))
+	{
+		if (ca++ % 2)
+		{
+			x = _x;
+			y = _y < height / 2 ? float(int(_y) % spawnSpace) : float(int(_y) % spawnSpace + height - spawnSpace);
+		}
+		else
+		{
+			x = _x < width / 2 ? float(int(_x) % spawnSpace) : float(int(_x) % spawnSpace + width - spawnSpace);
+			y = _y;
+		}
+	}
+	else
+	{
+		x = _x;
+		y = _y;
+	}
+}
+
+void StupidMob::Draw(Graphics & gfx) const
+{
+	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, color);
+}
