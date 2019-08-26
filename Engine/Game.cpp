@@ -31,12 +31,12 @@ Game::Game( MainWindow& wnd )
 {
 	crossHair.SetColor({ 255, 0, 0});
 
-	int mobsTospawn = 12;
+	int mobsTospawn = 4;
 
 	for (int i = 0; i < mobsTospawn; i++)
 	{
 		mobs.emplace_back(StupidMob(0, 0));
-		//mobs[i].Respawn();
+		mobs[i].Respawn(xRng(blessRng), yRng(blessRng), gfx);
 	}
 }
 

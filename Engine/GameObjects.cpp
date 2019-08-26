@@ -1,8 +1,9 @@
 #include "GameObjects.h"
 
-GameObject::GameObject() : x(0), y(0),	dx(0), dy(0),
-													tileXSize(0), tileYSize(0), 
-													color({255, 255, 255})
+GameObject::GameObject() : 
+	x(0), y(0),	dx(0), dy(0),
+	tileXSize(0), tileYSize(0), 
+	color({255, 255, 255})
 {
 }
 
@@ -58,6 +59,8 @@ Player::Player(float _x, float _y)
 
 void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 {
+	//////////////////////////////////////////////////////////////
+	// Basic movement controll
 	bool adIsPresed = false;
 	bool wsIsPresed = false;
 	if (kbd.KeyIsPressed('W'))
@@ -81,6 +84,8 @@ void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 		adIsPresed = true;
 	}
 
+	//////////////////////////////////////////////////////////////
+	// Accseleration
 	if (kbd.KeyIsPressed(VK_SHIFT))
 	{
 		if (adIsPresed)
@@ -89,14 +94,18 @@ void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 			dy *= 2.0f;
 	}
 
+	//////////////////////////////////////////////////////////////
+	// Shoting projectiles
 	if (mouse.LeftIsPressed())
 	{
 		bullets.emplace_back(Projectile());
-		bullets.back().Launch(x, y, mouse.GetPosX(), mouse.GetPosY());
+		bullets.back().Launch(x, y, float(mouse.GetPosX()), float(mouse.GetPosY()));
 		bullets.back().x = x;
 		bullets.back().y = y;
 	}
 
+	//////////////////////////////////////////////////////////////
+	// Calculating finale dx and dy
 	if (dx > friction)
 		dx -= friction;
 	else if (dx < -friction)
@@ -112,10 +121,13 @@ void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 	else
 		dy = 0;
 
-
+	//////////////////////////////////////////////////////////////
+	// Adding dx and dy to coords
 	x += dx;
 	y += dy;
 
+	//////////////////////////////////////////////////////////////
+	// Moving bullets
 	for (int i = 0; i < bullets.size(); i++)
 		bullets[i].Move();
 }
@@ -185,7 +197,7 @@ void StupidMob::MoveTowards(GameObject & target)
 {
 	float delX = target.x - x;
 	float delY = target.y - y;
-	float c = sqrt(delX*delX + delY* delY);
+	float c = sqrt(delX*delX + delY*delY);
 
 	dx = (delX / c) * speed;
 	dy = (delY / c) * speed;
@@ -202,10 +214,10 @@ void StupidMob::Respawn(float _x, float _y, const Graphics &gfx)
 	static char ca = 1;
 
 	if (_x > width - tileXSize)
-		_x = width - tileXSize;
+		_x = float(width)- tileXSize;
 	
 	if (_y > height - tileYSize)
-		_y = height - tileYSize;
+		_y = float(height) - tileYSize;
 
 	if ((_x > spawnSpace && _x < width - spawnSpace) && (_y > spawnSpace && _y < height - spawnSpace))
 	{

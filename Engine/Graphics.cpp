@@ -316,7 +316,7 @@ void Graphics::PutPixel( int x,int y,Color c )
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
 }
 
-void Graphics::MakeLine(int x0, int y0 , int x1, int y1)
+void Graphics::MakeLine(int x0, int y0 , int x1, int y1, Color color)
 {
 	int Y = 0;
 	int X = 0;
@@ -335,7 +335,7 @@ void Graphics::MakeLine(int x0, int y0 , int x1, int y1)
 	for (int i = x0; i <= x1; i++)
 	{
 		Y = int((float(i - x0) / ((x1 - x0) ? (x1 - x0) : 1))*(y1 - y0) + y0);
-		PutPixel(i ,Y, 255, 0, 0);
+		PutPixel(i ,Y,color);
 	}
 
 	if (y1 < y0)
@@ -352,7 +352,7 @@ void Graphics::MakeLine(int x0, int y0 , int x1, int y1)
 	for (int i = y0; i <= y1; i++)
 	{
 		X = int((float(i - y0) / ((y1 - y0) ? (y1 - y0) : 1))*(x1 - x0) + x0);
-		PutPixel(X, i, 255, 0, 0);
+		PutPixel(X, i, color);
 	}
 }
 
@@ -373,6 +373,18 @@ void Graphics::MakeRect(int x, int y, int xSize, int ySize, Color color)
 		for (int _x = 0; _x < xSize; _x++)
 		{
 			PutPixel(_x + x, _y + y, color);
+		}
+}
+
+void Graphics::MakeCircle(int _x, int _y, int radius, Color color)
+{
+
+	int rad_sq = radius * radius;
+	for (int y = -radius; y < radius*2; y++)
+		for (int x = -radius; x < radius*2; x++)
+		{
+			if (rad_sq >= (x*x + y*y))
+				PutPixel(x + _x + radius, y + _y + radius, color);
 		}
 }
 

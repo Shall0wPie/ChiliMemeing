@@ -52,8 +52,8 @@ private:
 
 	std::random_device rd;
 	std::mt19937 blessRng;
-	std::uniform_int_distribution<int> xRng;
-	std::uniform_int_distribution<int> yRng;
+	std::uniform_real_distribution<float> xRng;
+	std::uniform_real_distribution<float> yRng;
 
 	Player crossHair = { 400, 300 };
 	std::vector<StupidMob> mobs;

@@ -48,14 +48,14 @@ class SizeableRectangle : public GameObject
 {
 public:
 	SizeableRectangle(float _x, float _y);
-	void Draw(Graphics &gfx) const;
 	void ControlSizes(const Keyboard &kbd);
+	void Draw(Graphics &gfx) const;
 };
 
 class StupidMob : public GameObject
 {
 private:
-	static constexpr float speed = 1.5f;
+	static constexpr float speed = 1;
 public:
 	bool isAlive;
 	StupidMob(float _x, float _y);
