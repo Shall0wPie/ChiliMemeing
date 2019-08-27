@@ -46,7 +46,25 @@ void Projectile::Move()
 
 void Projectile::Draw(Graphics &gfx) const
 {
-	gfx.MakeRect(int(x), int(y), tileXSize, tileYSize, Colors::Green);
+	gfx.MakeLine(int(x), int(y), x - dx*dt, y - dy*dt, Colors::Green);
+}
+
+bool Projectile::CheckCollision(const GameObject & obj) const
+{
+	float X = x;
+	float delX = x - dx * dt;
+	float Y = y;
+	float delY = y - dy * dt;
+
+	if (X > delX)
+		std::swap(X, delX);
+	if (Y > delY)
+		std::swap(Y, delY);
+	
+	return (X <= obj.x + obj.tileXSize &&
+		obj.x <= delX &&
+		Y <= obj.y + obj.tileYSize &&
+		obj.y <= delY);
 }
 
 Player::Player(float _x, float _y)
@@ -96,12 +114,20 @@ void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 
 	//////////////////////////////////////////////////////////////
 	// Shoting projectiles
-	if (mouse.LeftIsPressed())
+	if (mouse.LeftIsPressed() && !cooldown)
 	{
 		bullets.emplace_back(Projectile());
 		bullets.back().Launch(x, y, float(mouse.GetPosX()), float(mouse.GetPosY()));
-		bullets.back().x = x;
-		bullets.back().y = y;
+		bullets.back().x = x + tileXSize/2;
+		bullets.back().y = y + tileYSize/2;
+		
+		cooldown = cooldownTime;
+	}
+	else
+	{
+		cooldown -= dt;
+		if (cooldown < 0)
+			cooldown = 0;
 	}
 
 	//////////////////////////////////////////////////////////////

@@ -49,6 +49,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
+	bool Paused;
 
 	std::random_device rd;
 	std::mt19937 blessRng;

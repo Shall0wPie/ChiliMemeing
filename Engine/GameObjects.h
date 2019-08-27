@@ -26,12 +26,13 @@ public:
 class Projectile : public GameObject
 {
 private:
-	static constexpr float speed = 5*60;
+	static constexpr float speed = 50*60;
 public:
 	Projectile();
 	void Launch(float x0, float y0, float x1, float y1);
 	void Move();
 	void Draw(Graphics &gfx) const;
+	bool CheckCollision(const GameObject &obj) const;
 };
 
 class Player : public GameObject
@@ -39,6 +40,8 @@ class Player : public GameObject
 private:
 	static constexpr float friction = 6.0f;
 	static constexpr float speed = 4*60 + friction;
+	static constexpr float cooldownTime =0.1f;
+	float cooldown;
 public:
 	std::vector<Projectile> bullets;
 

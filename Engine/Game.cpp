@@ -24,15 +24,16 @@
 ////////////////////////////////////////////////
 //		Static member definition
 Timer GameObject::timer;
-float GameObject::dt = 0;
+float GameObject::dt;
 
-Game::Game( MainWindow& wnd )
+Game::Game(MainWindow& wnd)
 	:
-	wnd( wnd ),
-	gfx( wnd ),
-	blessRng( rd()),
-	xRng(0 , gfx.ScreenWidth - 20),
-	yRng(0 , gfx.ScreenHeight - 20)
+	wnd(wnd),
+	gfx(wnd),
+	blessRng(rd()),
+	xRng(0, gfx.ScreenWidth - 20),
+	yRng(0, gfx.ScreenHeight - 20),
+	Paused(false)
 {
 	crossHair.SetColor({ 255, 0, 0});
 
@@ -60,33 +61,39 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	GameObject::dt = GameObject::timer.Mark();
+	if (wnd.mouse.RightIsPressed())
+		Paused = true;
+	else
+		Paused = false;
 
-
-	crossHair.Control(wnd.kbd, wnd.mouse);
-	CheckBorderCollision(crossHair);
-	for (int i = 0; i < mobs.size(); i++)
+	if (!Paused)
 	{
-		mobs[i].MoveTowards(crossHair);
-		CheckBorderCollision(mobs[i]);
-	}
-
-	for (int bulletCounter = 0; bulletCounter < crossHair.bullets.size(); bulletCounter++)
-	{
-		if (CheckBorderCollision(crossHair.bullets[bulletCounter]))
+		crossHair.Control(wnd.kbd, wnd.mouse);
+		CheckBorderCollision(crossHair);
+		for (int i = 0; i < mobs.size(); i++)
 		{
-			crossHair.bullets.erase(crossHair.bullets.begin() + bulletCounter);
-			bulletCounter--;
-			continue;
+			mobs[i].MoveTowards(crossHair);
+			CheckBorderCollision(mobs[i]);
 		}
 
-		for (int mobCounter = 0; mobCounter < mobs.size(); mobCounter++)
+		for (int bulletCounter = 0; bulletCounter < crossHair.bullets.size(); bulletCounter++)
 		{
-			if (crossHair.bullets[bulletCounter].CheckCollision(mobs[mobCounter]))
+			if (CheckBorderCollision(crossHair.bullets[bulletCounter]))
 			{
-				mobs[mobCounter].Respawn(xRng(blessRng), yRng(blessRng), gfx);
 				crossHair.bullets.erase(crossHair.bullets.begin() + bulletCounter);
 				bulletCounter--;
-				break;
+				continue;
+			}
+
+			for (int mobCounter = 0; mobCounter < mobs.size(); mobCounter++)
+			{
+				if (crossHair.bullets[bulletCounter].CheckCollision(mobs[mobCounter]))
+				{
+					mobs[mobCounter].Respawn(xRng(blessRng), yRng(blessRng), gfx);
+					crossHair.bullets.erase(crossHair.bullets.begin() + bulletCounter);
+					bulletCounter--;
+					break;
+				}
 			}
 		}
 	}
