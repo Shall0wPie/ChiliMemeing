@@ -21,6 +21,11 @@
 #include "MainWindow.h"
 #include "Game.h"
 
+////////////////////////////////////////////////
+//		Static member definition
+Timer GameObject::timer;
+float GameObject::dt = 0;
+
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
@@ -54,9 +59,11 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	GameObject::dt = GameObject::timer.Mark();
+
+
 	crossHair.Control(wnd.kbd, wnd.mouse);
 	CheckBorderCollision(crossHair);
-	
 	for (int i = 0; i < mobs.size(); i++)
 	{
 		mobs[i].MoveTowards(crossHair);

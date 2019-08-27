@@ -40,8 +40,8 @@ void Projectile::Launch(float x0, float y0, float x1, float y1)
 
 void Projectile::Move()
 {
-	x += dx;
-	y += dy;
+	x += dx * dt;
+	y += dy * dt;
 }
 
 void Projectile::Draw(Graphics &gfx) const
@@ -123,8 +123,8 @@ void Player::Control(const Keyboard &kbd, const Mouse &mouse)
 
 	//////////////////////////////////////////////////////////////
 	// Adding dx and dy to coords
-	x += dx;
-	y += dy;
+	x += dx * dt;
+	y += dy * dt;
 
 	//////////////////////////////////////////////////////////////
 	// Moving bullets
@@ -202,8 +202,8 @@ void StupidMob::MoveTowards(GameObject & target)
 	dx = (delX / c) * speed;
 	dy = (delY / c) * speed;
 
-	x += dx;
-	y += dy;
+	x += dx * dt;
+	y += dy * dt;
 }
 
 void StupidMob::Respawn(float _x, float _y, const Graphics &gfx)

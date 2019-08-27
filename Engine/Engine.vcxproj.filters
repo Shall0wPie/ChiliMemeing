@@ -16,66 +16,84 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{8b6c92a8-f65d-451e-80e3-d65773602b92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Geme stuf">
+      <UniqueIdentifier>{93dad0e5-b4d3-4557-b174-6a48000fac93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Geme stuf">
+      <UniqueIdentifier>{6db778d2-0380-48f2-85b6-06d2eab5c4d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework stuf">
+      <UniqueIdentifier>{fb92ad8c-702c-4776-92fe-8f6710d9e964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework stuf">
+      <UniqueIdentifier>{2080a8f3-1e03-46bf-a71a-f1f09bd2639f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChiliWin.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GameObjects.h">
+      <Filter>Header Files\Geme stuf</Filter>
     </ClInclude>
-    <ClInclude Include="Colors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXErr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files\Geme stuf</Filter>
     </ClInclude>
     <ClInclude Include="ChiliException.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="ChiliWin.h">
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.h">
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="DXErr.h">
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow.h">
+      <Filter>Header Files\Framework stuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Header Files\Framework stuf</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Framework stuf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework stuf</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework stuf</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework stuf</Filter>
     </ClCompile>
     <ClCompile Include="Keyboard.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework stuf</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework stuf</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework stuf</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework stuf</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Geme stuf</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Geme stuf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

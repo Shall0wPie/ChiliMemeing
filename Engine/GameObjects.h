@@ -1,6 +1,7 @@
 #pragma once
 #include "Graphics.h"
 #include "MainWindow.h"
+#include "Timer.h"
 
 class GameObject
 {
@@ -12,6 +13,8 @@ public:
 	int tileXSize;
 	int tileYSize;
 	Color color;
+	static Timer timer;
+	static float dt;
 private:
 public:
 	GameObject();
@@ -23,7 +26,7 @@ public:
 class Projectile : public GameObject
 {
 private:
-	static constexpr float speed = 5;
+	static constexpr float speed = 5*60;
 public:
 	Projectile();
 	void Launch(float x0, float y0, float x1, float y1);
@@ -34,8 +37,8 @@ public:
 class Player : public GameObject
 {
 private:
-	static constexpr float friction = 0.1f;
-	static constexpr float speed = 4 + friction;
+	static constexpr float friction = 6.0f;
+	static constexpr float speed = 4*60 + friction;
 public:
 	std::vector<Projectile> bullets;
 
@@ -55,7 +58,7 @@ public:
 class StupidMob : public GameObject
 {
 private:
-	static constexpr float speed = 1;
+	static constexpr float speed = 1*60;
 public:
 	bool isAlive;
 	StupidMob(float _x, float _y);
